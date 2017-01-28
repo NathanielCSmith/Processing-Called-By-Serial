@@ -9,7 +9,7 @@
 import processing.serial.*;
 import processing.video.*;
 
-
+String val;
 Serial myPort;
 
 Movie roundOne;
@@ -27,37 +27,23 @@ void setup() {
   size(640, 360);
   background(0);
 
-  //roundFour = new Movie(this, "Round4.mov");
-  //roundTwo = new Movie(this, "Round2.mov");
+  roundSix = new Movie(this, "Round6.mov");
+  roundFive = new Movie(this, "Round5.mov");
+  roundFour = new Movie(this, "Round4.mov");
+  roundThree = new Movie(this, "Round3.mov");
+  roundTwo = new Movie(this, "Round2.mov");
   roundOne = new Movie(this, "Round1.mov");
 
-  //roundOne.play();
-
+  roundOne.play();
+  roundTwo.play();
+  roundThree.play();
+  roundFour.play();
+  roundFive.play();
+  roundSix.play();
+  
+  String portName = Serial.list()[0];
+  myPort = new Serial(this, portName, 9600);
 }
-
-void serialEvent(Serial myPort) {
-  String message;
-  // is there actually any data?
-  if (myPort.available() > 0) {
-    // yes, put it in message.
-    message = myPort.readStringUntil('\n');
-  } else {
-    // no, do nothing.
-    return;
-  }
-  if (message == null) {
-    // there is not actually a full message
-    return;
-  }
-  if ("team01\t10".equals(message)) {
-    //play video 1 for that event
-    roundOne.play();
-  } else { //this maps in button press quantity function arduino make 8 like this 4 red 4 blue
-    // Do nothing
-    return;
-  } 
-}
-
 
 void movieEvent(Movie m) {
   m.read();
@@ -65,15 +51,30 @@ void movieEvent(Movie m) {
 
 
 void draw() {
-  image(roundOne, 0, 0, width, height);
-  //if (mo == true) { 
-  //  
-  //} else {
-  //  image (roundOne, 0, 0, width, height);
-  //}
-
-  //if (mo && roundOne.time() >= roundOne.duration()) {
-  //  roundOne.stop();
-  //  mo = false;
-  //  roundTwo.play();
+if ( myPort.available() == 0) {  // If data is available,
+    image(roundOne, 0, 0, width, height);
+    val = myPort.read();         // read it and store it in val
+  }
+  else if ( myPort.available() == 1) {  // If data is available,
+    image(roundTwo, 0, 0, width, height);
+    val = myPort.read();         // read it and store it in val
+  }
+  else if ( myPort.available() == 2) {  // If data is available,
+    image(roundThree, 0, 0, width, height);
+    val = myPort.read();         // read it and store it in val
+  }
+  else if ( myPort.available() == 3) {  // If data is available,
+    image(roundFour, 0, 0, width, height);
+    val = myPort.read();         // read it and store it in val
+  }
+  else if ( myPort.available() == 4) {  // If data is available,
+    image(roundFive, 0, 0, width, height);
+    val = myPort.read();         // read it and store it in val
+  }
+  else if ( myPort.available() == 5) {  // If data is available,
+    image(roundSix, 0, 0, width, height);
+    val = myPort.read();         // read it and store it in val
+  } else {
+    image (roundOne, 0, 0, width, height);
+  }
 }
